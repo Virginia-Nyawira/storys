@@ -3,17 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:storys/Model/blogpost.dart';
+import 'package:storys/Pages/styles.dart';
 
 class BlogPostForm extends StatefulWidget {
   const BlogPostForm({super.key});
+
   @override
   _BlogPostFormState createState() => _BlogPostFormState();
 }
 
 class _BlogPostFormState extends State<BlogPostForm> {
-
   final _formKey = GlobalKey<FormState>();
-  final BlogPost _blogPost = BlogPost();
+   final BlogPost _blogPost = BlogPost();
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -21,9 +22,13 @@ class _BlogPostFormState extends State<BlogPostForm> {
       final response = await postBlogData();
       if (response.statusCode == 201) {
         _showSnackbar('Post saved successfully');
+        debugPrint('Post saved successfully');
         _formKey.currentState!.reset();
       } else {
         _showSnackbar('Error saving post');
+        debugPrint('Error saving post');
+        print('Response Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
       }
     }
   }
@@ -34,11 +39,13 @@ class _BlogPostFormState extends State<BlogPostForm> {
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'heading': _blogPost.heading,
-      'blogBody': _blogPost.body,
       'image': _blogPost.image,
+      'body': _blogPost.body,
       'lessons': _blogPost.lessons,
     });
-
+    print('Request URL: $url');
+    print('Request Body: $body');
+    print('Request Headers: $headers');
     return await http.post(Uri.parse(url), headers: headers, body: body);
   }
 
@@ -55,7 +62,10 @@ class _BlogPostFormState extends State<BlogPostForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Blog Post'),
+        centerTitle: true,
+        title:  Text('Create Post',
+         style: headingTextStyle(),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -64,8 +74,10 @@ class _BlogPostFormState extends State<BlogPostForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              ///Heading
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Heading (max 50 words)'),
+                decoration:
+                    const InputDecoration(labelText: 'Heading (max 50 words)'),
                 maxLength: 50,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -76,8 +88,25 @@ class _BlogPostFormState extends State<BlogPostForm> {
                 onChanged: (value) => _blogPost.heading = value,
               ),
               const SizedBox(height: 16.0),
+
+              ///Image
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Blog Body (max 2000 words)'),
+                decoration:
+                const InputDecoration(labelText: 'Image URL (max 300 words)'),
+                maxLength: 300,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'url is required';
+                  }
+                  return null;
+                },
+                onChanged: (value) => _blogPost.image = value,
+              ),
+              const SizedBox(height: 16.0),
+              ///Body
+              TextFormField(
+                decoration: const InputDecoration(
+                    labelText: 'Blog Body (max 2000 words)'),
                 maxLength: 2000,
                 maxLines: null,
                 validator: (value) {
@@ -88,9 +117,12 @@ class _BlogPostFormState extends State<BlogPostForm> {
                 },
                 onChanged: (value) => _blogPost.body = value,
               ),
+
               const SizedBox(height: 16.0),
+              ///Lessons
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Lessons (max 300 words)'),
+                decoration:
+                    const InputDecoration(labelText: 'Lessons (max 300 words)'),
                 maxLength: 300,
                 maxLines: null,
                 validator: (value) {
@@ -113,18 +145,3 @@ class _BlogPostFormState extends State<BlogPostForm> {
     );
   }
 }
-// Please replace 'YOUR_API_URL_HERE' with the actual URL of your Postman API. This code will handle the API request when the "Post" button is pressed and show a snackbar to indicate whether the post was saved successfully or if there was an error. Make sure you've included the necessary http package in your pubspec.yaml file:
-//
-// yaml
-// Copy code
-// dependencies:
-// flutter:
-// sdk: flutter
-// http: ^0.13.3 # Example version, check for the latest version
-// Remember to handle API errors, loading indicators, and possibly implement more robust error handling mechanisms in a real-world scenario.
-
-
-
-
-
-
