@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storys/Pages/Blogger_storys.dart';
 import 'package:storys/Pages/homepage.dart';
 import 'package:storys/Pages/post_story.dart';
 import 'package:storys/Pages/styles.dart';
@@ -43,6 +44,20 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text(
                 "Post",
+                style: headingTextStyle().copyWith(color: Colors.teal),
+              ),
+            ),
+          ),
+          Card(
+            color: Colors.white38,
+            child: TextButton(
+              onPressed: () {
+                ///To posting page
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const BloggerPosts()));
+              },
+              child: Text(
+                "My Posts",
                 style: headingTextStyle().copyWith(color: Colors.teal),
               ),
             ),

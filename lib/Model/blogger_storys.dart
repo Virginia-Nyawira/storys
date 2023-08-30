@@ -10,7 +10,7 @@ String bloggerStorysToJson(BloggerStorys data) => json.encode(data.toJson());
 
 class BloggerStorys {
   String kind;
-  List<Item> items;
+  List<Post> items;
   String etag;
 
   BloggerStorys({
@@ -21,7 +21,7 @@ class BloggerStorys {
 
   factory BloggerStorys.fromJson(Map<String, dynamic> json) => BloggerStorys(
     kind: json["kind"],
-    items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+    items: List<Post>.from(json["items"].map((x) => Post.fromJson(x))),
     etag: json["etag"],
   );
 
@@ -32,7 +32,7 @@ class BloggerStorys {
   };
 }
 
-class Item {
+class Post {
   String kind;
   String id;
   Blog blog;
@@ -46,7 +46,7 @@ class Item {
   Replies replies;
   String etag;
 
-  Item({
+  Post({
     required this.kind,
     required this.id,
     required this.blog,
@@ -61,7 +61,7 @@ class Item {
     required this.etag,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory Post.fromJson(Map<String, dynamic> json) => Post(
     kind: json["kind"],
     id: json["id"],
     blog: Blog.fromJson(json["blog"]),
