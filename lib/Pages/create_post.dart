@@ -34,7 +34,6 @@ class _BlogPostFormState extends State<BlogPostForm> {
   }
 
   Future<http.Response> postBlogData() async {
-    // final url = 'http://itspearls.mooo.com/stories/mystorys'; // Replace with your Postman API URL
     const url = 'http://itspearls.mooo.com/stories/mystorys';
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
